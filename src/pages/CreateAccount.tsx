@@ -40,7 +40,7 @@ function BirthYear({ nextStep }: { nextStep: () => void }) {
   return (
     <div className="p-20 flex items-center flex-col gap-3 text-2xl font-normal">
       <span>
-        Where you born in <span className="font-black">{year}</span>?
+        Where you born in the year <span className="font-black">{year}</span>?
       </span>
       <div className="flex flex-row gap-3">
         {buttonState ? (

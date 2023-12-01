@@ -159,7 +159,7 @@ function Bone() {
             ],
           },
           {
-            text: "... Do you like to bones yourself?",
+            text: "... Do you like to eat bones yourself?",
             key: "okay",
             options: [
               {
