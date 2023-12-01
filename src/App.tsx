@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Background } from "./components/Background";
 import { AccountPage } from "./pages/CreateAccount";
 import { PostSignupPage } from "./pages/PostSignup";
@@ -7,6 +8,32 @@ import { TurkeysPage } from "./pages/Turkeys";
 import { useStore } from "./store";
 
 export function App() {
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const listener = () => {
+      setIsDesktop(window.innerWidth > 768);
+    };
+    window.addEventListener("resize", listener);
+    listener();
+    return () => window.removeEventListener("resize", listener);
+  });
+
+  if (!isDesktop) {
+    return (
+      <div>
+        <Background />
+        <div className="w-screen h-screen flex items-center justify-center">
+          <h1 className="text-center z-50 text-white font-bold p-20 text-4xl drop-shadow-2xl">
+            Sorry, this interactive experience is only available on larger
+            screens.
+          </h1>
+          B
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div>
       <Background />
