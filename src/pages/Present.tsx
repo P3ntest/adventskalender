@@ -128,7 +128,7 @@ function Bone() {
   useEffect(() => {
     setTimeout(() => {
       setShowHusky(true);
-    }, 1000);
+    }, 5000);
   }, []);
 
   return (

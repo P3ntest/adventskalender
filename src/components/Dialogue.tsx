@@ -121,7 +121,7 @@ function Option({
           `translate(${currentPosition[0]}px, ${currentPosition[1]}px)`,
       }}
       onMouseEnter={() => {
-        if (option.movesAway) {
+        if (option.movesAway && visible) {
           setCurrentPosition((c) => [
             c[0] + Math.random() * 500 - 250,
             c[1] - 100,
