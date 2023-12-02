@@ -1,6 +1,8 @@
 import { ComponentProps, useEffect, useState } from "react";
 import huskyImg from "../assets/husky.png";
 import { TypeAnimation } from "react-type-animation";
+import { twMerge } from "tailwind-merge";
+import { useSpring, animated } from "@react-spring/web";
 
 export function Dialogue({
   dialogue,
@@ -16,6 +18,17 @@ export function Dialogue({
     }[];
   }[];
 }) {
+  const huskySprings = useSpring({
+    from: { y: -200, x: -200 },
+    to: { y: 0, x: 0 },
+    config: {
+      tension: 30,
+      friction: 0,
+      duration: 300,
+      damping: 0.4,
+    },
+  });
+
   const [state, setState] = useState<string | number>(0);
 
   const currentDialogue =
@@ -23,14 +36,28 @@ export function Dialogue({
       ? dialogue[state]
       : dialogue.find((d) => d.key === state)!;
 
+  const [doneTyping, setDoneTyping] = useState(false);
+  useEffect(() => {
+    setDoneTyping(false);
+  }, [currentDialogue.text]);
+
+  const [initialStartTyping, setInitialStartTyping] = useState(false);
+  useEffect(() => {
+    setTimeout(() => {
+      setInitialStartTyping(true);
+    }, 1000);
+  }, []);
+
   return (
-    <div className="w-screen h-screen fixed z-50">
-      <img
+    <div className="w-screen h-screen fixed z-40">
+      <animated.img
         src={huskyImg}
         alt=""
-        className="absolute bottom-0 left-0"
+        className="absolute"
         style={{
           width: "40vw",
+          bottom: huskySprings.y.to((y) => `${y}px`),
+          left: huskySprings.x.to((x) => `${x}px`),
         }}
       />
       <div
@@ -39,18 +66,31 @@ export function Dialogue({
           left: "25vw",
         }}
       >
-        <div className="bg-white rounded-xl p-4 shadow-lg w-full h-64">
+        <animated.div
+          className="bg-white rounded-xl p-4 shadow-lg w-full h-64"
+          style={{
+            transform: huskySprings.y.to((y) => `translateY(${-y}px)`),
+          }}
+        >
           <div className="text-2xl font-bold">
-            <TypeAnimation
-              sequence={[currentDialogue.text]}
-              cursor={false}
-              key={currentDialogue.key}
-            />
+            {initialStartTyping && (
+              <TypeAnimation
+                sequence={[currentDialogue.text, () => setDoneTyping(true)]}
+                cursor={false}
+                key={currentDialogue.key}
+                speed={60}
+              />
+            )}
           </div>
-        </div>
+        </animated.div>
         <div className="w-full flex flex-row justify-start gap-2">
           {currentDialogue.options.map((option) => (
-            <Option option={option} key={option.text} setState={setState} />
+            <Option
+              visible={doneTyping}
+              option={option}
+              key={option.text}
+              setState={setState}
+            />
           ))}
         </div>
       </div>
@@ -61,15 +101,20 @@ export function Dialogue({
 function Option({
   option,
   setState,
+  visible,
 }: {
   option: ComponentProps<typeof Dialogue>["dialogue"][0]["options"][0];
   setState: (next: string) => void;
+  visible: boolean;
 }) {
   const [currentPosition, setCurrentPosition] = useState([0, 0]);
 
   return (
     <button
-      className="bg-white rounded-xl p-4 shadow-lg text-2xl hover:scale-110 transition-all relative"
+      className={twMerge(
+        "bg-white rounded-xl p-4 shadow-lg text-2xl hover:scale-110 transition-all relative opacity-0",
+        visible && "opacity-100"
+      )}
       style={{
         transform:
           option.movesAway &&

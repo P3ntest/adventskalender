@@ -236,7 +236,7 @@ function Done({
   const loadingStates = [
     "Connecting to the mainframe...",
     "Loading your details...",
-    "Cross checking your against the naughty list...",
+    "Cross checking you against the naughty list...",
     "Checking your bank account balance...",
     "Checking your credit score...",
   ];

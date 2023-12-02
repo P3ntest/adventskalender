@@ -37,7 +37,7 @@ export function App() {
   return (
     <div>
       <Background />
-      <div className="z-50 fixed w-screen h-screen">
+      <div className="z-30 fixed w-screen h-screen">
         <CurrentPage />
       </div>
     </div>
